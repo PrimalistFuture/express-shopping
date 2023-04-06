@@ -21,18 +21,30 @@ router.post('/', function (req, res) {
 });
 
 router.get('/:name', function (req, res) {
-  console.log(req.body)
-  let inputName = req.query.name;
-  console.log(inputName);
+  let inputName = req.params.name;
   let match = items.find(item => item.name === inputName);
+
   if (match) {
     return res.json({match})
   } else {
     throw new BadRequestError()
   }
-
 });
 
+router.patch('/:name', function(req, res) {
+  let inputName = req.params.name;
+  let match = items.find((item) => item.name === inputName);
+
+  if (req.body === undefined) throw new BadRequestError();
+
+  let newItemName = req.body.name;
+  let newItemPrice = req.body.price;
+
+  match.name = newItemName;
+  match.price = newItemPrice;
+
+  return res.json({updated: {match}});
+});
 
 
 
